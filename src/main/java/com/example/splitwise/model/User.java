@@ -90,5 +90,4 @@ public class User {
     public List<Debitor> getDebitors(){ return debitors; }
     public List<Event> getEvents(){ return events; }
 
-
 }

@@ -151,6 +151,27 @@ public class UserController {
         }
     }
 
+    // GET /api/users/search?username=...
+    @GetMapping("/search")
+    public ResponseEntity<?> searchByUsername(@RequestParam String username) {
+        if (username == null || username.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body(Map.of("error", "username required"));
+        }
+        var opt = userService.findByUsernameOptional(username.trim());
+        if (opt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "user not found"));
+        }
+        User u = opt.get();
+        Map<String,Object> resp = Map.of(
+                "id", u.getId(),
+                "username", u.getUsername(),
+                "total", u.getTotal()
+        );
+        return ResponseEntity.ok(resp);
+    }
+
+
+
 
 
 

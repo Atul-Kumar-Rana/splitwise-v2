@@ -1,6 +1,8 @@
 package com.example.splitwise;
 
-import com.example.splitwise.CustomOAuth2UserService;
+import com.example.splitwise.security.CustomSuccessHandler;
+import com.example.splitwise.service.UserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,9 +17,14 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final CustomOAuth2UserService oauth2UserService;
+    private final UserService userService;
 
-    public SecurityConfig(CustomOAuth2UserService oauth2UserService) {
+    @Value("${app.frontend.url:http://localhost:8081}")
+    private String frontendUrl;
+
+    public SecurityConfig(CustomOAuth2UserService oauth2UserService, UserService userService) {
         this.oauth2UserService = oauth2UserService;
+        this.userService = userService;
     }
 
     @Bean
@@ -43,9 +50,8 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/oauth2/authorization/google")
                         .userInfoEndpoint(userInfo -> userInfo.userService(oauth2UserService))
-//       use frontend dashboard page or something
-                 .defaultSuccessUrl("http://localhost:5173/auth-callback", true)
-
+                        // use custom success handler to auto-create user and redirect to frontend
+                        .successHandler(new CustomSuccessHandler(userService, frontendUrl))
                 );
 
         return http.build();
@@ -54,7 +60,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8081"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("*"));

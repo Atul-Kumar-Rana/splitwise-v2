@@ -85,4 +85,14 @@ public class UserService {
         return userRepo.save(u);
     }
 
+    // in UserService.java
+    public Optional<User> findByEmailOptional(String email) {
+        return userRepo.findByEmail(email); // implement repo method to return Optional
+    }
+    public Optional<User> findByUsernameOptional(String username) {
+        return userRepo.findByUsername(username);
+    }
+
+
+
 }
