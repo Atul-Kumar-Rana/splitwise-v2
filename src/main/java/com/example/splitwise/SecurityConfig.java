@@ -47,6 +47,7 @@ public class SecurityConfig {
                         // public endpoints
                         .requestMatchers("/api/auth/**", "/api/users/ping", "/h2-console/**", "/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        .requestMatchers("/api/auth/signup", "/api/auth/login", "/api/auth/verify-email").permitAll()
                         // allow preflight requests
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         // everything else requires authentication

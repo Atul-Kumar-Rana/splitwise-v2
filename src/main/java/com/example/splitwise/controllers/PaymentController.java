@@ -1,6 +1,7 @@
 package com.example.splitwise.controllers;
 
 import com.example.splitwise.model.Transaction;
+import com.example.splitwise.repo.TransactionRepo;
 import com.example.splitwise.service.PaymentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,10 @@ import java.math.BigDecimal;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    public PaymentController(PaymentService paymentService){ this.paymentService = paymentService; }
+    private final TransactionRepo transactionRepo;
+    public PaymentController(PaymentService paymentService, TransactionRepo transactionRepo){ this.paymentService = paymentService;
+        this.transactionRepo = transactionRepo;
+    }
 
     public static class PayDto {
         public Long debitorId;
