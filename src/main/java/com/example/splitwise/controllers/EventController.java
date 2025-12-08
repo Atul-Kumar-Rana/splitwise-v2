@@ -6,6 +6,7 @@ import com.example.splitwise.service.EventService;
 import com.example.splitwise.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -79,6 +80,19 @@ public class EventController {
 //            return ResponseEntity.notFound().build();
 //        }
 //    }
+    @GetMapping
+    public ResponseEntity<?> getMyEvents(Authentication authentication) {
+        String email = authentication.getName(); // comes from JWT (you use email as username)
+
+        var optUser = userService.getByEmail(email);
+        if (optUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "user_not_found"));
+        }
+
+        User me = optUser.get();
+        return ResponseEntity.ok(eventService.getEventsForUser(me.getId()));
+    }
     @GetMapping("/{id}")
     public ResponseEntity<?> getEvent(@PathVariable Long id){
         try {
