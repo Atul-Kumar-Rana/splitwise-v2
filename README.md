@@ -165,7 +165,7 @@ SplitEase was built to:
 Backend Developer | DevOps Enthusiast | Cloud Learner
 
 * GitHub:https://github.com/Atul-Kumar-Rana
-* Project Repository:https://github.com/Atul-Kumar-Rana/splitwise-v2
+* Project Repository:https://github.com/Atul-Kumar-Rana/splitease-v1
 * Live Application: spliteaseapp.atul.codes
 
 ---
